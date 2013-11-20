@@ -9,3 +9,5 @@ for(i in 1:nrow(senate)){
 }
 
 sll_cw_phrases("legislator","B001261",key="b1884b38a7e04ffeb9bdc91a0a63fe1b")
+
+congress
