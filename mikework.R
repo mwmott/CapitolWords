@@ -45,10 +45,10 @@ ggplot(dat_both, aes(day, count, colour=party)) + geom_line() +
 # Show me top legislators who use the word drone - from here we might be able 
 # to see whether they stopped? Also, not sure how to have drones + drone. This 
 # is drone.
-sll_cw_entity_phrases(entity="legislator",phrase='drone',sort="count", 
+topdroneusers=sll_cw_entity_phrases(entity="legislator",phrase='drone',sort="count", 
                       key="b1884b38a7e04ffeb9bdc91a0a63fe1b")
 # Drones
-sll_cw_entity_phrases(entity="legislator",phrase='drones',sort="count", 
+topdronesusers=sll_cw_entity_phrases(entity="legislator",phrase='drones',sort="count", 
                       key="b1884b38a7e04ffeb9bdc91a0a63fe1b")
 
 # Top legislator is Rand Paul, bioguide - P000603. The only time he said
@@ -61,5 +61,24 @@ sll_cw_timeseries("drone", bioguide_id="P000603", "1996-01-01","2013-11-22",
 # Would like to see from month to month, who's usage of drone/s dropped 
 # below 50% of previous value? Or plot all of these?
 
-#Giving top 20 users of word drones
+# Giving top 20 users of word drones w/ numbers
 print(paste(topdroneusers$legislator[i],topdroneusers$count[1:20]))
+
+# Top 20 drone users - just the bioguides
+top20 = paste(topdroneusers$legislator[1:20])
+
+# Loop baby! Just need to figure out how to see them all at once.
+for(i in topdroneusers$legislator[1:20]){
+  ts= sll_cw_timeseries("drone", bioguide_id=i, "1996-01-01","2013-11-22", key="b1884b38a7e04ffeb9bdc91a0a63fe1b")
+  plot(ts$day,ts$count)
+}
+
+# Cool. Going to use lattice/trellis/qq to do this.
+
+# Example plot (https://www.stat.auckland.ac.nz/~ihaka/787/lectures-trellis.pdf)
+Depth = equal.count(quakes$depth,number = 8,overlap = .1)
+xyplot(lat ~ long | Depth, data = quakes,xlab = "Longtitude", ylab = "Lattitude")
+
+# Trying to work through example plot w/ our data
+Drones=equal.count(ts$count, number = 20, overlap =.1)
+xyplot(ts$count~ts$day | Drones, data=i)
