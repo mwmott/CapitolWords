@@ -79,6 +79,22 @@ for(i in topdroneusers$legislator[1:20]){
 Depth = equal.count(quakes$depth,number = 8,overlap = .1)
 xyplot(lat ~ long | Depth, data = quakes,xlab = "Longtitude", ylab = "Lattitude")
 
-# Trying to work through example plot w/ our data
+# Trying to work through example plot w/ our data. Not sure where to go from here?
 Drones=equal.count(ts$count, number = 20, overlap =.1)
 xyplot(ts$count~ts$day | Drones, data=i)
+
+# Experimenting with working with drone legislation using OpenStates API:
+
+#Installing relevant packages/getting JSON
+install.packages("rjson")
+library(rjson)
+install.packages("XML")
+library(XML)
+url = "openstates.org/api/v1//bills/?q=drone&apikey=b1884b38a7e04ffeb9bdc91a0a63fe1b"
+response = getURL(url)
+dronebills = fromJSON(response)
+
+# Converting into dataframe. This gives us a list of 62 bills with comma sep. title,
+# date, etc. Need to figure out how to convert into more of a df. Function syntax gathered from
+# http://stackoverflow.com/questions/6526646/getting-dataframe-directly-from-json-file:
+dronebillsdf= as.data.frame(t(sapply(dronebills, unlist)))
